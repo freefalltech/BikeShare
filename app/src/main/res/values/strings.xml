@@ -14,4 +14,5 @@
         completions."
     </string>
     <string name="title_activity_search_bike">Rent a Bike!</string>
+    <string name = "oauth_client_id">639341200104-4ngoqilcibu5ff17ig3cjhrv8kosjpm2.apps.googleusercontent.com</string>
 </resources>
