@@ -18,4 +18,5 @@
     <string name="google_sign_in">Sign in with Google</string>
     <string name="already_a_member">Already a member? Login</string>
     <string name="not_a_member">Not a member? Register</string>
+    <string name="aadhaar_sign_in">Sign in with Aadhaar</string>
 </resources>

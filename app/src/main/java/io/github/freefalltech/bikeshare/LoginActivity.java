@@ -1,6 +1,8 @@
 package io.github.freefalltech.bikeshare;
 
 import android.content.Intent;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -9,6 +11,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +43,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/dancing_rainbow.ttf");
+        ((TextView)findViewById(R.id.header)).setTypeface(tf);
+
+
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null)
@@ -61,6 +69,9 @@ public class LoginActivity extends AppCompatActivity {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         SignInButton gmail = (SignInButton) findViewById(R.id.gmail_login_button);
+
+        TextView textView = (TextView) gmail.getChildAt(0);
+        textView.setText(R.string.google_sign_in);
         gmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,8 +79,11 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
-        TextView textView = (TextView) gmail.getChildAt(0);
-        textView.setText(R.string.google_sign_in);
+
+        FrameLayout aadhaar = (FrameLayout) findViewById(R.id.aadhaar_login_button);
+        textView = (TextView) findViewById(R.id.aadhaar_login_text);
+        aadhaar.measure(0, 0);
+        textView.getLayoutParams().width = (int) ((aadhaar.getMeasuredWidth() * 4.09) / 5.08);
 
         findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (!isLogin && password.length() < 8) {
                     passwordInput.setError("Minimum 8 characters required");
-                    if(!isError) passwordInput.requestFocus();
+                    if (!isError) passwordInput.requestFocus();
                     isError = true;
                 }
 
@@ -121,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
-                                                            if(task.isSuccessful()){
+                                                            if (task.isSuccessful()) {
                                                                 showDialog("Email verification sent", "Verify your email and log in");
                                                                 switchLoginRegister(findViewById(R.id.switch_text_view));
                                                                 emailInput.setText("");
@@ -145,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void showDialog(String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
@@ -196,7 +211,6 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null)
             proceed();
-
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
@@ -233,5 +247,28 @@ public class LoginActivity extends AppCompatActivity {
                 passwordInput = (EditText) findViewById(R.id.input_password);
         emailInput.setError(null);
         passwordInput.setError(null);
+    }
+
+    @Override
+    public void onWindowFocusChanged (boolean hasFocus){
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus){
+            View header = findViewById(R.id.header);
+            if (isViewOverlapping(header, findViewById(R.id.email_login_container))) {
+                header.setVisibility(View.GONE);
+                Log.d(TAG, "OVERLAP!!");
+            } else {
+                header.setVisibility(View.VISIBLE);
+                Log.d(TAG, "NO OVERLAP");
+            }
+        }
+    }
+
+    private boolean isViewOverlapping(View v1, View v2) {
+        Rect rect1 = new Rect(v1.getLeft(), v1.getTop(), v1.getRight(), v1.getBottom());
+        Log.d(TAG,rect1.toString());
+        Rect rect2 = new Rect(v2.getLeft(), v2.getTop(), v2.getRight(), v2.getBottom());
+        Log.d(TAG,rect2.toString());
+        return rect1.intersect(rect2);
     }
 }
