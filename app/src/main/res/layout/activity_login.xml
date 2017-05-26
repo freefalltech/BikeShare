@@ -3,11 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
-    android:padding="5dp"
     tools:context="io.github.freefalltech.bikeshare.LoginActivity"
     tools:ignore="HardcodedText">
-
     <LinearLayout
         android:id="@+id/email_login_container"
         android:layout_width="match_parent"
@@ -118,4 +117,22 @@
         </FrameLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/grey_out_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#B0000000"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        />
+
+    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:mpb_progressStyle="circular"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        style="@style/Widget.MaterialProgressBar.ProgressBar.Large.NoPadding" />
 </RelativeLayout>

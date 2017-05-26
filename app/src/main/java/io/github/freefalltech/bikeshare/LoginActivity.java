@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -37,6 +38,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 0;
@@ -44,6 +47,8 @@ public class LoginActivity extends AppCompatActivity {
     private static boolean isLogin = true;
     private FirebaseAuth mAuth;
     private String TAG = "Google Sign In";
+    private MaterialProgressBar progressBar;
+    private View greyScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +58,24 @@ public class LoginActivity extends AppCompatActivity {
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/dancing_rainbow.ttf");
         ((TextView) findViewById(R.id.header)).setTypeface(tf);
 
+        progressBar = (MaterialProgressBar) findViewById(R.id.progress_bar);
+        greyScreen = findViewById(R.id.grey_out_screen);
 
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
-            mAuth.getCurrentUser().reload().addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (mAuth.getCurrentUser().isEmailVerified())
-                        proceed();
-                    else showVerificationSteps();
-                }
-            });
+            if (mAuth.getCurrentUser().isEmailVerified())
+                proceed();
+            else {
+                mAuth.getCurrentUser().reload().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (mAuth.getCurrentUser().isEmailVerified())
+                            proceed();
+                        else showVerificationSteps();
+                    }
+                });
+            }
         } else {
             //Google sign in
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -88,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
             gmail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    grayScale(true);
                     Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                     startActivityForResult(signInIntent, RC_SIGN_IN);
                 }
@@ -120,11 +132,13 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     if (!isError) {
+                        grayScale(true);
                         if (isLogin) {
                             mAuth.signInWithEmailAndPassword(email, password)
                                     .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                         @Override
                                         public void onComplete(@NonNull Task<AuthResult> task) {
+                                            grayScale(false);
                                             if (task.isSuccessful()) {
                                                 // Sign in success, update UI with the signed-in user's information
                                                 Log.d(TAG, "signInWithEmail:success");
@@ -148,25 +162,27 @@ public class LoginActivity extends AppCompatActivity {
                                                 // Sign in success, update UI with the signed-in user's information
                                                 Log.d(TAG, "registerWithEmail:success");
                                                 final FirebaseUser curUser = mAuth.getCurrentUser();
-                                                if(curUser!=null)
-                                                curUser.sendEmailVerification()
-                                                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                if (task.isSuccessful()) {
-                                                                    showDialog("Email verification sent", "Verify your email and log in");
-                                                                    switchLoginRegister(findViewById(R.id.switch_text_view));
-                                                                    emailInput.setText("");
-                                                                    emailInput.requestFocus();
-                                                                    passwordInput.setText("");
-                                                                } else {
-                                                                    showDialog("Something went wrong in sending email for verification",
-                                                                            "Please log in with the registered credentials to continue");
+                                                if (curUser != null)
+                                                    curUser.sendEmailVerification()
+                                                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    grayScale(false);
+                                                                    if (task.isSuccessful()) {
+                                                                        showDialog("Email verification sent", "Verify your email and log in");
+                                                                        switchLoginRegister(findViewById(R.id.switch_text_view));
+                                                                        emailInput.setText("");
+                                                                        emailInput.requestFocus();
+                                                                        passwordInput.setText("");
+                                                                    } else {
+                                                                        showDialog("Something went wrong in sending email for verification",
+                                                                                "Please log in with the registered credentials to continue");
+                                                                    }
+                                                                    mAuth.signOut();
                                                                 }
-                                                                mAuth.signOut();
-                                                            }
-                                                        });
-
+                                                            });
+                                                else
+                                                    grayScale(false);
                                             } else {
                                                 showDialog("Something went wrong", "Please try registering later");
                                             }
@@ -179,6 +195,20 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private void grayScale(boolean enable){
+        int visibility = enable?View.VISIBLE: View.GONE;
+        progressBar.setVisibility(visibility);
+        greyScreen.setVisibility(visibility);
+        touchEvents(!enable);
+    }
+
+    private void touchEvents(boolean enabled) {
+        if (enabled)
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+        else getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
 
     private void showDialog(String title, String message) {
         AlertDialog.Builder builder;
@@ -218,7 +248,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Signed out, show unauthenticated UI.
             Toast.makeText(this, "Sign in failed", Toast.LENGTH_LONG).show();
-
+            grayScale(false);
             Log.d(TAG, "" + result.getStatus().getStatusCode());
         }
     }
@@ -302,6 +332,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        grayScale(false);
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
