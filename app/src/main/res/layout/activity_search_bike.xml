@@ -10,7 +10,76 @@
 
 
 
+      <Button
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Start Listening"
+          android:onClick="letsStartListeningLocation"
+          android:id="@+id/startListeningButton"
+          android:layout_alignParentBottom="true"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true"
+          android:layout_marginLeft="16dp"
+          android:layout_marginStart="16dp"
+          android:layout_marginBottom="13dp" />
 
+
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop Listening"
+            android:onClick="letsStopListeningLocation"
+            android:id="@+id/stopListeningButton"
+            android:layout_alignBaseline="@+id/startListeningButton"
+            android:layout_alignBottom="@+id/startListeningButton"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="13dp"
+            android:layout_marginEnd="13dp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="your location coordinate will be updated here"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="92dp"
+        android:id="@+id/coordinateTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:text="address will be updated here"
+        android:layout_below="@+id/coordinateTextView"
+        android:id="@+id/addressTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="46dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lastUpdatedTime"
+        android:text="last updated time"
+        android:layout_below="@+id/addressTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="69dp" />
+
+    <Button
+        android:id="@+id/fetchAddressButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/startListeningButton"
+        android:layout_marginBottom="28dp"
+        android:layout_toLeftOf="@+id/stopListeningButton"
+        android:layout_toStartOf="@+id/stopListeningButton"
+        android:onClick="checkAddress"
+        android:text="Button"
+        tools:text="Fetchaddress" />
 
 
 </RelativeLayout>
