@@ -28,14 +28,22 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.DateFormat;
 import java.util.Date;
 
 
 public class SearchBikeActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener  {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Location mLastLocation, mCurrentLocation;
@@ -47,6 +55,8 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
     int permissionLocationCheckFine;
     GoogleApiClient mGoogleApiClient;
 
+    SupportMapFragment mapFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +65,10 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         formatTextviews();
         checkForPermissions();
         mResultReceiver = new AddressResultReceiver(new Handler());
+
+        //declare the map
+         mapFragment = (SupportMapFragment)
+                getSupportFragmentManager().findFragmentById(R.id.map);
 
 
 
@@ -162,6 +176,8 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         lastUpdatedTime.setText(mLastUpdateTime);
         coordinateTextView.setText("Latitude is " + String.valueOf(mCurrentLocation.getLatitude())
                 + "Longitude is" + String.valueOf(mCurrentLocation.getLongitude()));
+        mapFragment.getMapAsync(this);
+
     }
 
 
@@ -226,6 +242,26 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         addressTextView = (TextView) findViewById(R.id.addressTextView);
         lastUpdatedTime = (TextView) findViewById(R.id.lastUpdatedTime);
 
+
+    }
+
+
+    //to add markers, and more map settings after the map gets initialized
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        //create a latlong variable of my location for now and add a marker
+        LatLng myLocationLatLong = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions().position(myLocationLatLong).title("mAddressOutput");
+        googleMap.addMarker(markerOptions);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocationLatLong));
+
+        //add a circle around my location
+        CircleOptions circleOptions = new CircleOptions();
+        circleOptions.center(myLocationLatLong);
+        circleOptions.radius(500); //metres
+        Circle circle = googleMap.addCircle(circleOptions);
+        googleMap.setMinZoomPreference(10.0f);
+        
 
     }
 

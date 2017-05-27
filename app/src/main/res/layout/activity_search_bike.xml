@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
+    android:id="@+id/search_bike_layut"
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,10 +18,7 @@
           android:id="@+id/startListeningButton"
           android:layout_alignParentBottom="true"
           android:layout_alignParentLeft="true"
-          android:layout_alignParentStart="true"
-          android:layout_marginLeft="16dp"
-          android:layout_marginStart="16dp"
-          android:layout_marginBottom="13dp" />
+          android:layout_alignParentStart="true" />
 
 
 
@@ -32,12 +29,9 @@
             android:text="Stop Listening"
             android:onClick="letsStopListeningLocation"
             android:id="@+id/stopListeningButton"
-            android:layout_alignBaseline="@+id/startListeningButton"
-            android:layout_alignBottom="@+id/startListeningButton"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="13dp"
-            android:layout_marginEnd="13dp" />
+            android:layout_alignParentEnd="true" />
 
 
     <TextView
@@ -45,10 +39,12 @@
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:text="your location coordinate will be updated here"
+        android:id="@+id/coordinateTextView"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="92dp"
-        android:id="@+id/coordinateTextView" />
+        android:layout_alignRight="@+id/stopListeningButton"
+        android:layout_alignEnd="@+id/stopListeningButton"
+        android:layout_marginRight="18dp"
+        android:layout_marginEnd="18dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -56,30 +52,38 @@
         android:textColor="#000000"
         android:textSize="20sp"
         android:text="address will be updated here"
-        android:layout_below="@+id/coordinateTextView"
         android:id="@+id/addressTextView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="46dp" />
+        android:layout_below="@+id/coordinateTextView"
+        android:layout_centerHorizontal="true" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lastUpdatedTime"
         android:text="last updated time"
         android:layout_below="@+id/addressTextView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="69dp" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/fetchAddressButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/startListeningButton"
-        android:layout_marginBottom="28dp"
-        android:layout_toLeftOf="@+id/stopListeningButton"
-        android:layout_toStartOf="@+id/stopListeningButton"
         android:onClick="checkAddress"
         android:text="Button"
-        tools:text="Fetchaddress" />
+        tools:text="Fetchaddress"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/lastUpdatedTime"
+        android:layout_alignStart="@+id/lastUpdatedTime" />
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="500sp"
+        tools:context="com.example.mapwithmarker.MapsMarkerActivity"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>
