@@ -277,7 +277,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         //temporary "my location" based on mysore junction
         LatLng mysoreJunction = new LatLng(12.316991, 76.645130);
         //BitmapDescriptor bitmapDescriptor =  BitmapDescriptorFactory.fromResource(R.drawable.my_location_icon);
-        MarkerOptions markerOptionsMysoreJunction = new MarkerOptions().position(mysoreJunction).title("Mysore Junction").
+        MarkerOptions markerOptionsMysoreJunction = new MarkerOptions().position(mysoreJunction).title("Mysore Railway Station").
                 icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
         googleMap.addMarker(markerOptionsMysoreJunction);
 
