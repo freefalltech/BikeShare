@@ -15,4 +15,6 @@
     </string>
     <string name="title_activity_search_bike">Rent a Bike!</string>
     <string name="google_maps_api_key">AIzaSyCFx1B4k05lMDydcYvvQc0aoWA-MfMlnj0</string>
+    <string name="welcome">Welcome</string>
+    <string name="find_bikes">B I K E F I N D E R</string>
 </resources>

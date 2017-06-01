@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search_bike_layut"
@@ -6,84 +6,139 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    tools:context="io.github.freefalltech.bikeshare.SearchBikeActivity" >
+    tools:context="io.github.freefalltech.bikeshare.SearchBikeActivity"
+    android:orientation="vertical">
 
-
-
-      <Button
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="Start Listening"
-          android:onClick="letsStartListeningLocation"
-          android:id="@+id/startListeningButton"
-          android:layout_alignParentBottom="true"
-          android:layout_alignParentLeft="true"
-          android:layout_alignParentStart="true" />
-
-
-
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Stop Listening"
-            android:onClick="letsStopListeningLocation"
-            android:id="@+id/stopListeningButton"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:text="your location coordinate will be updated here"
-        android:id="@+id/coordinateTextView"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/stopListeningButton"
-        android:layout_alignEnd="@+id/stopListeningButton"
-        android:layout_marginRight="18dp"
-        android:layout_marginEnd="18dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:text="address will be updated here"
-        android:id="@+id/addressTextView"
-        android:layout_below="@+id/coordinateTextView"
-        android:layout_centerHorizontal="true" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lastUpdatedTime"
-        android:text="last updated time"
-        android:layout_below="@+id/addressTextView"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:id="@+id/fetchAddressButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="checkAddress"
-        android:text="Button"
-        tools:text="Fetchaddress"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/lastUpdatedTime"
-        android:layout_alignStart="@+id/lastUpdatedTime" />
-
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="500sp"
-        tools:context="com.example.mapwithmarker.MapsMarkerActivity"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
 
-</RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:layout_gravity="center">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/welcome"
+                        android:id="@+id/bikeFinderTxt1"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="30sp"
+                        android:textSize="30sp"
+                        android:textColor="@color/black"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Abilash Senthilkumar"
+                        android:layout_gravity="center"
+                        android:id="@+id/bikeFinderTxt2"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+
+                </LinearLayout>
+
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:visibility="gone"
+                   >
+
+                   <ImageView
+                       android:layout_width="wrap_content"
+                       android:layout_height="300sp"
+                       android:layout_margin="20sp"
+                       android:src="@drawable/current_address_bg"
+                       android:id="@+id/imageView" />
+
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="Y O U R  L O C A T I O N"
+                       android:textColor="@color/white"
+                       android:layout_alignTop="@+id/imageView"
+                       android:layout_alignLeft="@+id/imageView"
+                       android:layout_alignStart="@+id/imageView"
+                       android:layout_marginLeft="17dp"
+                       android:layout_marginStart="17dp"
+                       android:id="@+id/bikeFinderTxt3"
+                       android:layout_marginTop="125dp" />
+
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="address"
+                       android:textColor="@color/white"
+                       android:textSize="30sp"
+                       android:id="@+id/addressTextView"
+                       android:layout_below="@+id/bikeFinderTxt3"
+                       android:layout_alignLeft="@+id/bikeFinderTxt3"
+                       android:layout_alignStart="@+id/bikeFinderTxt3"
+                       android:layout_marginTop="17dp" />
+               </RelativeLayout>
+
+
+
+              <ImageView
+                  android:layout_width="120sp"
+                  android:layout_height="120sp"
+                  android:src="@drawable/bike_logo"
+                  android:layout_gravity="center"
+                  android:layout_margin="10sp"/>
+
+
+              <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/find_bikes"
+                  android:id="@+id/findBikeText"
+                  android:layout_gravity="center"
+                  android:textColor="@color/black"
+                  android:textSize="22sp"/>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible">
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lastUpdatedTime"
+                        android:layout_margin="10sp"
+                        android:text="last updated time"
+                        android:layout_centerHorizontal="true" />
+
+
+                    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:id="@+id/map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="500sp"
+                        tools:context="com.example.mapwithmarker.MapsMarkerActivity"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_margin="20sp"/>
+
+                </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

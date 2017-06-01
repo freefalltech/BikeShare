@@ -5,6 +5,8 @@ package io.github.freefalltech.bikeshare;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
@@ -33,20 +35,24 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.vision.text.Text;
 
 import java.text.DateFormat;
 import java.util.Date;
 
 
 public class SearchBikeActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMapReadyCallback {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
-    private Location mLastLocation, mCurrentLocation;
+    private Location mCurrentLocation;
     private LocationRequest mLocationRequest;
     boolean mRequestLocationUpdates;
     TextView coordinateTextView, addressTextView, lastUpdatedTime;
@@ -58,6 +64,17 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
     SupportMapFragment mapFragment;
 
 
+    //LatLng variabls for 5 places in Mysore;
+    LatLng latLng1, latLng2, latLng3, latLng4, latLng5;
+
+    //MarkerOptionGlobalVariables
+    MarkerOptions markerOptions1, markerOptions2, markerOptions3, markerOptions4, markerOptions5;
+
+    //and latitudes and longitudes of places are split into two arrays. therefore array's index should match
+    double[] latArray = {12.302494, 12.302842, 12.305103, 12.312557, 12.298020};
+    double[] longArray = {76.665334, 76.643230, 76.655098, 76.658174, 76.664368};
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,17 +84,15 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         mResultReceiver = new AddressResultReceiver(new Handler());
 
         //declare the map
-         mapFragment = (SupportMapFragment)
+        mapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.map);
-
 
 
     }
 
-    public void letsStartListeningLocation(View v){
+    public void letsStartListeningLocation() {
 
         mRequestLocationUpdates = true;
-
 
 
         // Create an instance of GoogleAPIClient.
@@ -104,36 +119,30 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
 
     }
 
-    public void letsStopListeningLocation(View v){
-        mGoogleApiClient.disconnect();
-        Toast.makeText(this, "LocationListener turned off", Toast.LENGTH_SHORT);
+
+    @Override
+    protected void onStart() {
+        letsStartListeningLocation();
+        super.onStart();
     }
-
-
-
 
 
     @Override
     protected void onStop() {
-        //mGoogleApiClient.disconnect();
+        mGoogleApiClient.disconnect();
         super.onStop();
 
     }
 
-    protected void createLocationRequest(){
+    protected void createLocationRequest() {
         //sets settings for the locationrequest
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
             /* allotted interval is 10 sec, and the fastest interval it can recieve
             due to other apps is 5 seconds to revent exceptions
             */
-            mLocationRequest.setInterval(10000);
-            mLocationRequest.setFastestInterval(5000);
-    }
-
-    public void checkAddress(View v){
-        startAddressIntentService();
-
+        mLocationRequest.setInterval(20000);
+        mLocationRequest.setFastestInterval(5000);
     }
 
 
@@ -145,8 +154,8 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
                         != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        if(mRequestLocationUpdates){
-           LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        if (mRequestLocationUpdates) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
 
     }
@@ -169,21 +178,20 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         updateUi();
 
 
-
     }
 
     private void updateUi() {
-        lastUpdatedTime.setText(mLastUpdateTime);
-        coordinateTextView.setText("Latitude is " + String.valueOf(mCurrentLocation.getLatitude())
-                + "Longitude is" + String.valueOf(mCurrentLocation.getLongitude()));
+        lastUpdatedTime.setText("Location last updated on " + mLastUpdateTime);
+//        coordinateTextView.setText("Latitude is " + String.valueOf(mCurrentLocation.getLatitude())
+        //              + "Longitude is" + String.valueOf(mCurrentLocation.getLongitude()));
         mapFragment.getMapAsync(this);
+        startAddressIntentService();
+
 
     }
 
 
-
-
-    protected void startAddressIntentService(){
+    protected void startAddressIntentService() {
         Intent intent = new Intent(this, FetchAddressIntentService.class);
         intent.putExtra(Constants.RECEIVER, mResultReceiver);
         intent.putExtra(Constants.LOCATION_DATA_EXTRA, mCurrentLocation);
@@ -235,12 +243,24 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         Typeface helvetica = Typeface.createFromAsset(getAssets(), "fonts/helvetica.ttf");
         Typeface arialblack = Typeface.createFromAsset(getAssets(), "fonts/arialblack.ttf");
         Typeface adam = Typeface.createFromAsset(getAssets(), "fonts/adam.otf");
+        Typeface futura = Typeface.createFromAsset(getAssets(), "fonts/futur.ttf");
+        Typeface futuraItalic = Typeface.createFromAsset(getAssets(), "fonts/futura_italic.ttf");
 
 
         //initialize txtviews
-        coordinateTextView = (TextView) findViewById(R.id.coordinateTextView);
+        TextView bikeFinderTextOne = (TextView) findViewById(R.id.bikeFinderTxt1);
+        TextView bikeFinderTextTwo = (TextView) findViewById(R.id.bikeFinderTxt2);
+        TextView bikeFinderTextThree = (TextView) findViewById(R.id.bikeFinderTxt3);
+        TextView findBikeText = (TextView) findViewById(R.id.findBikeText);
+
         addressTextView = (TextView) findViewById(R.id.addressTextView);
         lastUpdatedTime = (TextView) findViewById(R.id.lastUpdatedTime);
+
+        bikeFinderTextOne.setTypeface(futura);
+        bikeFinderTextTwo.setTypeface(futura);
+        bikeFinderTextThree.setTypeface(futura);
+        findBikeText.setTypeface(futuraItalic);
+        //typefaces set
 
 
     }
@@ -249,19 +269,71 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
     //to add markers, and more map settings after the map gets initialized
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        googleMap.setOnMarkerClickListener(this);
+
+        //googleMap.setMyLocationEnabled(true);
         //create a latlong variable of my location for now and add a marker
+
+        /*
         LatLng myLocationLatLong = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(myLocationLatLong).title("mAddressOutput");
         googleMap.addMarker(markerOptions);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocationLatLong));
+        */
 
-        //add a circle around my location
-        CircleOptions circleOptions = new CircleOptions();
-        circleOptions.center(myLocationLatLong);
-        circleOptions.radius(500); //metres
-        Circle circle = googleMap.addCircle(circleOptions);
-        googleMap.setMinZoomPreference(10.0f);
-        
+
+        //temporary "my location" based on mysore junction
+        LatLng mysoreJunction = new LatLng(12.316991, 76.645130);
+        BitmapDescriptor bitmapDescriptor =  BitmapDescriptorFactory.fromResource(R.drawable.my_location_icon);
+        MarkerOptions markerOptionsMysoreJunction = new MarkerOptions().position(mysoreJunction).title("Mysore Junction").
+                icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+        googleMap.addMarker(markerOptionsMysoreJunction);
+
+        //so currently 5 places in indra nagar, bangalore is taken
+        LatLng mysoreZoo = new LatLng(latArray[0], longArray[0]);
+        LatLng KSRTC = new LatLng(latArray[1], longArray[1]);
+        LatLng mysorePalace = new LatLng(latArray[2], longArray[2]);
+        LatLng mysoreRuralTerminus = new LatLng(latArray[3], longArray[3]);
+        LatLng inoxMysore = new LatLng(latArray[4], longArray[4]);
+
+        //markers for the
+        markerOptions1 = new MarkerOptions().position(mysoreZoo).title("Mysore Zoo");
+        markerOptions2 = new MarkerOptions().position(KSRTC).title("KSRTC");
+        markerOptions3 = new MarkerOptions().position(mysorePalace).title("Mysore Palace");
+        markerOptions4 = new MarkerOptions().position(mysoreRuralTerminus).title("Mysore Rural Terminus");
+        markerOptions5 = new MarkerOptions().position(inoxMysore).title("INOX Mysore");
+
+
+        //add markers for the above latlng
+        googleMap.addMarker(markerOptions1);
+        googleMap.addMarker(markerOptions2);
+        googleMap.addMarker(markerOptions3);
+        googleMap.addMarker(markerOptions4);
+        googleMap.addMarker(markerOptions5);
+
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(mysoreJunction));
+
+        //TODO make the markers a global variable, and then use them to verify onMarkerClick
+
+        googleMap.setMinZoomPreference(13.0f);
+
+
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+
+        //TODO pass LatLng and String id values to the FleetManagement Activity
+        return false;
+    }
+
+
+
+    public Bitmap resizeMapIcons(String iconName,int width, int height){
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+        return resizedBitmap;
 
     }
 
