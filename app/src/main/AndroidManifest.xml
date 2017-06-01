@@ -47,15 +47,7 @@
 
         <activity
             android:name=".SearchBikeActivity"
-            android:label="@string/title_activity_search_bike">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
+            android:label="@string/title_activity_search_bike" />
 
         <!-- FetchAddressIntentService helps to find user's address using coordinates -->
 
@@ -66,12 +58,16 @@
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".MyActivity" />
         <activity android:name=".SidebarActivity" />
-        <activity android:name=".MyAccount"></activity>
+        <activity android:name=".MyAccount" />
+        <activity android:name=".FleetActivity"></activity>
     </application>
 
 </manifest>

@@ -49,6 +49,7 @@
             android:layout_margin="30sp"
             android:textSize="20sp"
             android:textAlignment="center"
+            android:onClick="fleetActivityIntent"
             android:textColor="@color/black"/>
 
 
@@ -59,7 +60,8 @@
             android:layout_margin="30sp"
             android:textSize="20sp"
             android:textAlignment="center"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:onClick="logOut"/>
 
     </LinearLayout>
 

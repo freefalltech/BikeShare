@@ -1,24 +1,26 @@
 package io.github.freefalltech.bikeshare;
-//26 May 2017, Coded and maintained by abilash senthilkumar. github : @nextbiggeek
 
-
-import android.Manifest;
+import android.*;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.location.Location;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -39,25 +41,33 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.util.Date;
 
-
-public class SearchBikeActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks,
+public class FleetActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
-    //private GoogleMap mMap;
+    private GoogleMap mMap;
     private Location mCurrentLocation;
     private LocationRequest mLocationRequest;
     boolean mRequestLocationUpdates;
-    TextView addressTextView, lastUpdatedTime;
-    String mLastUpdateTime, mAddressOutput;
-    private ResultReceiver mResultReceiver;
+    TextView addressTextView;
+    String mLastUpdateTime;
     int permissionLocationCheckFine;
     GoogleApiClient mGoogleApiClient;
 
     SupportMapFragment mapFragment;
-
+    int humidity, temp, pressure;
+    String API_KEY, API_PASS;
 
     //LatLng variabls for 5 places in Mysore;
     //LatLng latLng1, latLng2, latLng3, latLng4, latLng5;
@@ -73,19 +83,15 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_bike);
-        formatTextviews();
+        setContentView(R.layout.activity_fleet);
+        API_KEY = BuildConfig.CLOUDANT_API_KEY;
+        API_PASS = BuildConfig.CLOUDANT_API_PASS;
+        //formatTextviews();
         checkForPermissions();
-        mResultReceiver = new AddressResultReceiver(new Handler());
 
         //declare the map
         mapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.map);
-
-
-
-
-
     }
 
     public void letsStartListeningLocation() {
@@ -106,7 +112,6 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         //mLocationRequest is initialized
 
         createLocationRequest();
-
         //then the locationSettings builder is also initialized
         LocationSettingsRequest.Builder mLocationSettingsRequest = new
                 LocationSettingsRequest.Builder().addLocationRequest(mLocationRequest);
@@ -121,6 +126,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
     @Override
     protected void onStart() {
         letsStartListeningLocation();
+        updateUi();
         super.onStart();
     }
 
@@ -146,9 +152,9 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -173,7 +179,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-        updateUi();
+        //updateUi();
     }
 
     private void updateUi() {
@@ -181,36 +187,36 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
 //        coordinateTextView.setText("Latitude is " + String.valueOf(mCurrentLocation.getLatitude())
         //              + "Longitude is" + String.valueOf(mCurrentLocation.getLongitude()));
         mapFragment.getMapAsync(this);
-        startAddressIntentService();
+        //startAddressIntentService();
 
 
     }
-
+/*
 
     protected void startAddressIntentService() {
         Intent intent = new Intent(this, FetchAddressIntentService.class);
         intent.putExtra(Constants.RECEIVER, mResultReceiver);
         intent.putExtra(Constants.LOCATION_DATA_EXTRA, mCurrentLocation);
         startService(intent);
-    }
+    }*/
 
 
     //permissions
     private void checkForPermissions() {
         //check if permissions are granted, and then continue
         permissionLocationCheckFine = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
+                android.Manifest.permission.ACCESS_FINE_LOCATION);
         if (permissionLocationCheckFine != PackageManager.PERMISSION_GRANTED) {
             //permission not granted. proceed to ask
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     12);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                            String permissions[],  int[] grantResults) {
+                                           String permissions[],  int[] grantResults) {
         switch (requestCode) {
             case 12: {
                 // If request is cancelled, the result arrays are empty.
@@ -231,7 +237,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
 
         }
     }
-
+/*
     private void formatTextviews() {
         //initialize typeface
         Typeface helvetica = Typeface.createFromAsset(getAssets(), "fonts/helvetica.ttf");
@@ -257,12 +263,13 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         //typefaces set
 
 
-    }
+    }*/
 
 
     //to add markers, and more map settings after the map gets initialized
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
         googleMap.setOnMarkerClickListener(this);
 
         //googleMap.setMyLocationEnabled(true);
@@ -309,18 +316,10 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
 
         //TODO make the markers a global variable, and then use them to verify onMarkerClick
 
-        googleMap.setMinZoomPreference(13.0f);
+        googleMap.setMinZoomPreference(15.0f);
+        LatLng cycleStart = new LatLng(12.315098, 76.645260), cycleEnd = markerOptions2.getPosition();
+        animateMarker(cycleStart, cycleEnd, false);
 
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(FirebaseAuth.getInstance().getCurrentUser()==null){
-            startActivity(new Intent(SearchBikeActivity.this,LoginActivity.class));
-            finish();
-        }
     }
 
     @Override
@@ -332,41 +331,93 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
     }
 
 
-
-    public Bitmap resizeMapIcons(String iconName,int width, int height){
+    public Bitmap resizeMapIcons(String iconName, int width, int height){
         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
         return Bitmap.createScaledBitmap(imageBitmap, width, height, false);
     }
 
+    public void animateMarker(final LatLng startPosition, final LatLng toPosition,
+                              final boolean hideMarker) {
 
-    class AddressResultReceiver extends ResultReceiver {
-        public AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
 
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
+        final Marker marker = mMap.addMarker(new MarkerOptions()
+                .position(startPosition)
+                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("bicycle_marker",62,174))));
 
-            // Display the address string
-            // or an error message sent from the intent service.
-            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
-            Log.v("TAG", "SUCCESS");
-            addressTextView.setText(mAddressOutput);
 
-            // Show a toast message if an address was found.
-            if (resultCode == Constants.SUCCESS_RESULT) {
-                //Toast.makeText(this, "address found", Toast.LENGTH_SHORT);
-                // TODO: Show address to user
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+
+        final long duration = 5000;
+        final Interpolator interpolator = new LinearInterpolator();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed
+                        / duration);
+                double lng = t * toPosition.longitude + (1 - t)
+                        * startPosition.longitude;
+                double lat = t * toPosition.latitude + (1 - t)
+                        * startPosition.latitude;
+
+                marker.setPosition(new LatLng(lat, lng));
+
+                if (t < 1.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
+                } else {
+                    if (hideMarker) {
+                        marker.setVisible(false);
+                    } else {
+                        marker.setVisible(true);
+                    }
+                }
             }
-
-        }
+        });
     }
 
-    public void sideBarIntent(View v){
-        Intent intent = new Intent(SearchBikeActivity.this, SidebarActivity.class);
-        startActivity(intent);
+    void updateVars(){
+        String output="";
+        try {
+
+            URL url = new URL("https://" + API_KEY + ":" + API_PASS + "@" + API_KEY + ".cloudant.com/my_database/_all_docs?include_docs=true");
+            URLConnection conn = url.openConnection();
+
+            // open the stream and put it into BufferedReader
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream()));
+
+            String inputLine;
+            while ((inputLine = br.readLine()) != null) {
+                output+=inputLine;
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                JSONArray rows = new JSONObject(output).getJSONArray("rows");
+                if(rows!=null){
+                    int pos = 0, maxval = -1;
+                    for(int i=0;i<rows.length();i++){
+                        String record = rows.getJSONObject(i).getString("id");
+                        int val = Integer.valueOf(record.substring(6));
+                        if(val>maxval){
+                            maxval=val;
+                            pos=i;
+                        }
+                    }
+                    JSONObject d = rows.getJSONObject(pos).getJSONObject("doc").getJSONObject("payload")
+                            .getJSONObject("d");
+                    temp = d.getInt("temp");
+                    humidity = d.getInt("humidity");
+                    pressure = d.getInt("pressure");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
-
-
-

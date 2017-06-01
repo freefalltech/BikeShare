@@ -29,4 +29,5 @@
     <string name="myactivityString">M Y A C T I V I T Y</string>
     <string name="logOut">L O G O U T</string>
     <string name="balance">B A L A N C E</string>
+    <string name="fleet_manage">F L E E T  M A N A G E M E N T</string>
 </resources>

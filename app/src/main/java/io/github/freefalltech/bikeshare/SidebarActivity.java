@@ -5,12 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-public class SidebarActivity extends AppCompatActivity {
+import com.google.firebase.auth.FirebaseAuth;
 
+public class SidebarActivity extends AppCompatActivity {
+    FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sidebar);
+        mAuth = FirebaseAuth.getInstance();
     }
 
     public void returnBack(View v){
@@ -28,6 +31,18 @@ public class SidebarActivity extends AppCompatActivity {
     public void openMyAccount(View v){
         //intent goes back to the searchBikeActivity
         Intent intent = new Intent(SidebarActivity.this, MyAccount.class);
+        startActivity(intent);
+    }
+
+    public void logOut(View view) {
+        if(mAuth.getCurrentUser()!=null){
+            mAuth.signOut();
+            finish();
+        }
+    }
+
+    public void fleetActivityIntent(View view) {
+        Intent intent = new Intent(SidebarActivity.this, FleetActivity.class);
         startActivity(intent);
     }
 }
