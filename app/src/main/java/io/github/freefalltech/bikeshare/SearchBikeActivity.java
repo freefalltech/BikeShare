@@ -32,7 +32,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -45,11 +44,11 @@ import java.util.Date;
 public class SearchBikeActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
-    private GoogleMap mMap;
+    //private GoogleMap mMap;
     private Location mCurrentLocation;
     private LocationRequest mLocationRequest;
     boolean mRequestLocationUpdates;
-    TextView coordinateTextView, addressTextView, lastUpdatedTime;
+    TextView addressTextView, lastUpdatedTime;
     String mLastUpdateTime, mAddressOutput;
     private ResultReceiver mResultReceiver;
     int permissionLocationCheckFine;
@@ -59,7 +58,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
 
 
     //LatLng variabls for 5 places in Mysore;
-    LatLng latLng1, latLng2, latLng3, latLng4, latLng5;
+    //LatLng latLng1, latLng2, latLng3, latLng4, latLng5;
 
     //MarkerOptionGlobalVariables
     MarkerOptions markerOptions1, markerOptions2, markerOptions3, markerOptions4, markerOptions5;
@@ -170,8 +169,6 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         updateUi();
-
-
     }
 
     private void updateUi() {
@@ -203,14 +200,12 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     12);
-
-
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case 12: {
                 // If request is cancelled, the result arrays are empty.
@@ -277,7 +272,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
 
         //temporary "my location" based on mysore junction
         LatLng mysoreJunction = new LatLng(12.316991, 76.645130);
-        BitmapDescriptor bitmapDescriptor =  BitmapDescriptorFactory.fromResource(R.drawable.my_location_icon);
+        //BitmapDescriptor bitmapDescriptor =  BitmapDescriptorFactory.fromResource(R.drawable.my_location_icon);
         MarkerOptions markerOptionsMysoreJunction = new MarkerOptions().position(mysoreJunction).title("Mysore Junction").
                 icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
         googleMap.addMarker(markerOptionsMysoreJunction);
@@ -326,14 +321,13 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
 
     public Bitmap resizeMapIcons(String iconName,int width, int height){
         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
-        return resizedBitmap;
+        return Bitmap.createScaledBitmap(imageBitmap, width, height, false);
 
     }
 
 
-    class AddressResultReceiver extends ResultReceiver {
-        public AddressResultReceiver(Handler handler) {
+    private class AddressResultReceiver extends ResultReceiver {
+        AddressResultReceiver(Handler handler) {
             super(handler);
         }
 
@@ -349,6 +343,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
             // Show a toast message if an address was found.
             if (resultCode == Constants.SUCCESS_RESULT) {
                 //Toast.makeText(this, "address found", Toast.LENGTH_SHORT);
+                // TODO: Show address to user
             }
 
         }
