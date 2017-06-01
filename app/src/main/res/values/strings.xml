@@ -14,7 +14,7 @@
         completions."
     </string>
     <string name="title_activity_search_bike">Rent a Bike!</string>
-    <string name = "oauth_client_id">639341200104-4ngoqilcibu5ff17ig3cjhrv8kosjpm2.apps.googleusercontent.com</string>
+    <string name="oauth_client_id">639341200104-4ngoqilcibu5ff17ig3cjhrv8kosjpm2.apps.googleusercontent.com</string>
     <string name="google_sign_in">Sign in with Google</string>
     <string name="already_a_member">Already a member? Login</string>
     <string name="not_a_member">Not a member? Register</string>
@@ -22,4 +22,10 @@
     <string name="google_maps_api_key">AIzaSyCFx1B4k05lMDydcYvvQc0aoWA-MfMlnj0</string>
     <string name="welcome">Welcome</string>
     <string name="find_bikes">B I K E F I N D E R</string>
+    <string name="myActivity">M Y    A C T I V I T Y</string>
+    <string name="elevation">E L E V A T I O N</string>
+    <string name="distance">D I S T A N C E</string>
+    <string name="myAccount">M Y A C C O U N T</string>
+    <string name="myactivityString">M Y A C T I V I T Y</string>
+    <string name="logOut">L O G O U T</string>
 </resources>

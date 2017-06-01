@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.github.freefalltech.bikeshare.MyActivity"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:id="@+id/my_Activity_layout">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/myActivity"
+        android:textColor="#c0c0c0"
+        android:id="@+id/myActivityText1"
+        android:textSize="12sp"
+        android:layout_gravity="center"
+        android:layout_margin="15sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="220sp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="W E A T H E R"
+                android:textSize="14sp"
+                android:id="@+id/weatherText1"
+                android:textColor="@color/black"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="32`C"
+                android:textSize="60sp"
+                android:id="@+id/weatherNumText"
+                android:textColor="@color/black"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Partly cloudy"
+                android:textSize="14sp"
+                android:id="@+id/weatherText2"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/humidityBg"
+                android:layout_width="300sp"
+                android:layout_height="120sp"
+                android:layout_centerInParent="true"
+                android:layout_margin="5sp"
+                android:src="@drawable/humidity_bg" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="57dp"
+                android:layout_marginRight="57dp"
+                android:text="20%"
+                android:textColor="@color/white"
+                android:textSize="50sp"
+                android:id="@+id/humidityNumberText"
+                android:layout_alignBottom="@+id/humidityBg"
+                android:layout_alignRight="@+id/humidityBg"
+                android:layout_alignEnd="@+id/humidityBg"
+                android:layout_marginBottom="19dp" />
+
+        </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp">
+
+        <ImageView
+            android:id="@+id/caloriesBg"
+            android:layout_width="300sp"
+            android:layout_height="120sp"
+            android:layout_centerInParent="true"
+            android:layout_margin="5sp"
+            android:src="@drawable/calories_bg" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="64dp"
+            android:layout_marginRight="64dp"
+            android:text="200"
+            android:textColor="@color/white"
+            android:textSize="50sp"
+            android:id="@+id/colorieNumberText"
+            android:layout_alignBottom="@+id/caloriesBg"
+            android:layout_alignRight="@+id/caloriesBg"
+            android:layout_alignEnd="@+id/caloriesBg"
+            android:layout_marginBottom="20dp" />
+
+    </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="10sp"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="300sp"
+                android:layout_height="120sp"
+                android:layout_centerInParent="true"
+                android:layout_margin="5sp"
+                android:src="@drawable/average_speed_bg"
+                android:id="@+id/imageView2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:textColor="@color/white"
+                android:text="15km/h"
+                android:layout_centerVertical="true"
+                android:layout_alignRight="@+id/imageView2"
+                android:layout_alignEnd="@+id/imageView2"
+                android:layout_marginRight="40dp"
+                android:layout_marginEnd="40dp" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="80sp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="88dp"
+                android:src="@drawable/hill_icon"
+                android:id="@+id/imageView3"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="88dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="39dp"
+                android:layout_marginStart="39dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/imageView3"
+                android:layout_toEndOf="@+id/imageView3">
+
+                <TextView
+                    android:id="@+id/elevationTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/elevation"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:layout_alignTop="@+id/elevationNumberText"
+                    android:layout_toRightOf="@+id/imageView3"
+                    android:layout_toEndOf="@+id/imageView3" />
+
+                <TextView
+                    android:id="@+id/elevationNumberText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/imageView3"
+                    android:layout_toRightOf="@+id/imageView3"
+                    android:text="20m"
+                    android:textColor="@color/black"
+                    android:textSize="40sp" />
+
+            </LinearLayout>
+
+
+
+
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="90sp"
+                android:layout_height="70sp"
+                android:src="@drawable/distance_icon"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/linearLayout"
+                android:layout_toStartOf="@+id/linearLayout"
+                android:layout_marginRight="24dp"
+                android:layout_marginEnd="24dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/linearLayout"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="95dp"
+                android:layout_marginEnd="95dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/distance"
+                    android:layout_alignTop="@+id/distanceNumberText"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:id="@+id/distanceTitleText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:id="@+id/distanceNumberText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="20m"
+                    android:textColor="@color/black"
+                    android:textSize="40sp"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true" />
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+
+
+    </LinearLayout>
+
+</ScrollView>

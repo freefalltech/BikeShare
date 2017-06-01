@@ -10,11 +10,12 @@
     -->
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -23,8 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".LoginActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -43,10 +45,9 @@
 
         <!-- google maps api uses openGl hence the feature is declared -->
 
-
         <activity
             android:name=".SearchBikeActivity"
-            android:label="@string/title_activity_search_bike"/>
+            android:label="@string/title_activity_search_bike"></activity>
 
         <!-- FetchAddressIntentService helps to find user's address using coordinates -->
 
@@ -63,6 +64,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MyActivity" />
+        <activity android:name=".SidebarActivity"></activity>
     </application>
 
 </manifest>

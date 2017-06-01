@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -243,7 +244,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         TextView findBikeText = (TextView) findViewById(R.id.findBikeText);
 
         addressTextView = (TextView) findViewById(R.id.addressTextView);
-        lastUpdatedTime = (TextView) findViewById(R.id.lastUpdatedTime);
+        //lastUpdatedTime = (TextView) findViewById(R.id.lastUpdatedTime);
 
         bikeFinderTextOne.setTypeface(futura);
         bikeFinderTextTwo.setTypeface(futura);
@@ -347,6 +348,11 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
             }
 
         }
+    }
+
+    public void sideBarIntent(View v){
+        Intent intent = new Intent(SearchBikeActivity.this, SidebarActivity.class);
+        startActivity(intent);
     }
 }
 
