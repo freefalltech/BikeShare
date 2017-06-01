@@ -82,6 +82,9 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
                 getSupportFragmentManager().findFragmentById(R.id.map);
 
 
+
+
+
     }
 
     public void letsStartListeningLocation() {
@@ -173,7 +176,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
     }
 
     private void updateUi() {
-        lastUpdatedTime.setText("Location last updated on " + mLastUpdateTime);
+        //lastUpdatedTime.setText("Location last updated on " + mLastUpdateTime);
 //        coordinateTextView.setText("Latitude is " + String.valueOf(mCurrentLocation.getLatitude())
         //              + "Longitude is" + String.valueOf(mCurrentLocation.getLongitude()));
         mapFragment.getMapAsync(this);
@@ -206,7 +209,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+                                            String permissions[],  int[] grantResults) {
         switch (requestCode) {
             case 12: {
                 // If request is cancelled, the result arrays are empty.
@@ -327,8 +330,8 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
     }
 
 
-    private class AddressResultReceiver extends ResultReceiver {
-        AddressResultReceiver(Handler handler) {
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
             super(handler);
         }
 

@@ -28,4 +28,5 @@
     <string name="myAccount">M Y A C C O U N T</string>
     <string name="myactivityString">M Y A C T I V I T Y</string>
     <string name="logOut">L O G O U T</string>
+    <string name="balance">B A L A N C E</string>
 </resources>

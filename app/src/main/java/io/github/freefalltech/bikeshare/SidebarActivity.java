@@ -24,4 +24,10 @@ public class SidebarActivity extends AppCompatActivity {
         Intent intent = new Intent(SidebarActivity.this, MyActivity.class);
         startActivity(intent);
     }
+
+    public void openMyAccount(View v){
+        //intent goes back to the searchBikeActivity
+        Intent intent = new Intent(SidebarActivity.this, MyAccount.class);
+        startActivity(intent);
+    }
 }

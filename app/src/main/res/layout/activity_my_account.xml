@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="io.github.freefalltech.bikeshare.MyAccount">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="M Y  A C C O U N T"
+        android:layout_margin="10sp"
+        android:layout_alignParentTop="true" />
+    
+    
+    <ImageView
+        android:layout_width="100sp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/temp_prof_pic"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:id="@+id/temp_profile_pic" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="Welcome, Abilash Senthilkumar"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="30sp"
+        android:layout_height="wrap_content"
+        android:text="BikeShare Balance: 250 Rs."/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="30sp"
+        android:layout_height="wrap_content"
+        android:text="Validity: 12/ 7/ 2017"/>
+
+
+
+
+</LinearLayout>

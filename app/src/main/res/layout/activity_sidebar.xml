@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:text="@string/myAccount"
             android:textAlignment="center"
-
+            android:onClick="openMyAccount"
             android:textSize="20sp"
             android:layout_margin="30sp"
             android:textColor="@color/black"/>
