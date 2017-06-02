@@ -78,7 +78,7 @@ public class FleetActivity extends FragmentActivity implements GoogleApiClient.C
     double[] latArray = {12.302494, 12.302842, 12.305103, 12.312557, 12.298020};
     double[] longArray = {76.665334, 76.643230, 76.655098, 76.658174, 76.664368};
 
-
+    Runnable myRunnable; Handler mHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,16 +92,29 @@ public class FleetActivity extends FragmentActivity implements GoogleApiClient.C
         mapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.map);
 
-        new Runnable(){
-            @Override
-            public void run() {
-                new UpdateVariables().execute();
-                new Handler().postDelayed(this,10000);
-            }
-        }.run();
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mHandler = new Handler();
+
+        myRunnable = new Runnable(){
+            @Override
+            public void run() {
+                new UpdateVariables().execute();
+                mHandler.postDelayed(this,10000);
+            }
+        };
+        myRunnable.run();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mHandler.removeCallbacks(myRunnable);
+    }
     public void letsStartListeningLocation() {
 
         mRequestLocationUpdates = true;
