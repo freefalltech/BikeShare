@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,43 +8,77 @@
     android:gravity="center"
     tools:context="io.github.freefalltech.bikeshare.MyAccount">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15sp"
+        android:src="@drawable/myaccount_bg"
+        android:id="@+id/imageView6" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         android:text="M Y  A C C O U N T"
-        android:layout_margin="10sp"
-        android:layout_alignParentTop="true" />
+        android:id="@+id/textView6"
+        android:layout_marginTop="26dp"
+        android:layout_alignTop="@+id/imageView6"
+        android:layout_alignLeft="@+id/textView5"
+        android:layout_alignStart="@+id/textView5" />
     
     
     <ImageView
         android:layout_width="100sp"
-        android:layout_height="wrap_content"
+        android:layout_height="100sp"
         android:src="@drawable/temp_prof_pic"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
-        android:id="@+id/temp_profile_pic" />
+        android:id="@+id/temp_profile_pic"
+        android:layout_marginLeft="54dp"
+        android:layout_marginStart="54dp"
+        android:layout_marginTop="42dp"
+        android:layout_below="@+id/textView6"
+        android:layout_alignLeft="@+id/imageView6"
+        android:layout_alignStart="@+id/imageView6" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:text="Welcome, Abilash Senthilkumar"/>
+        android:textSize="20sp"
+        android:text="Abilash Senthilkumar"
+        android:textColor="@color/white"
+
+        android:id="@+id/textView4"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/temp_profile_pic"
+        android:layout_alignLeft="@+id/temp_profile_pic"
+        android:layout_alignStart="@+id/temp_profile_pic" />
 
     <TextView
         android:layout_width="wrap_content"
         android:textSize="30sp"
         android:layout_height="wrap_content"
-        android:text="BikeShare Balance: 250 Rs."/>
+        android:text="₹250"
+        android:textColor="@color/white"
+        android:id="@+id/textView3"
+        android:layout_marginTop="69dp"
+        android:layout_below="@+id/textView4"
+        android:layout_alignLeft="@+id/textView4"
+        android:layout_alignStart="@+id/textView4" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:textSize="30sp"
         android:layout_height="wrap_content"
-        android:text="Validity: 12/ 7/ 2017"/>
+        android:text="28Days"
+        android:textColor="@color/white"
+
+        android:id="@+id/textView5"
+        android:layout_marginTop="75dp"
+        android:layout_below="@+id/textView3"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignStart="@+id/textView3" />
 
 
 
 
-</LinearLayout>
+</RelativeLayout>

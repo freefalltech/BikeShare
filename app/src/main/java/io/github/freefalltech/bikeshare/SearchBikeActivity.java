@@ -224,6 +224,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     // permission was granted, yay!
+                    letsStartListeningLocation();
 
 
                 } else {
