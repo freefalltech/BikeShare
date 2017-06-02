@@ -1,26 +1,20 @@
 package io.github.freefalltech.bikeshare;
 
-import android.*;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.os.ResultReceiver;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -44,20 +38,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 
-import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -103,7 +92,14 @@ public class FleetActivity extends FragmentActivity implements GoogleApiClient.C
         mapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.map);
 
-        new UpdateVariables().execute();
+        new Runnable(){
+            @Override
+            public void run() {
+                new UpdateVariables().execute();
+                new Handler().postDelayed(this,10000);
+            }
+        }.run();
+
     }
 
     public void letsStartListeningLocation() {
@@ -228,7 +224,7 @@ public class FleetActivity extends FragmentActivity implements GoogleApiClient.C
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[],  int[] grantResults) {
+                                           String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 12: {
                 // If request is cancelled, the result arrays are empty.
@@ -335,8 +331,8 @@ public class FleetActivity extends FragmentActivity implements GoogleApiClient.C
     }
 
 
-    public Bitmap resizeMapIcons(String iconName, int width, int height){
-        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
+    public Bitmap resizeMapIcons(String iconName, int width, int height) {
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(iconName, "drawable", getPackageName()));
         return Bitmap.createScaledBitmap(imageBitmap, width, height, false);
     }
 
@@ -346,7 +342,7 @@ public class FleetActivity extends FragmentActivity implements GoogleApiClient.C
 
         final Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(startPosition)
-                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("bicycle_marker",62,174))));
+                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("bicycle_marker", 62, 174))));
 
 
         final Handler handler = new Handler();
@@ -395,33 +391,36 @@ public class FleetActivity extends FragmentActivity implements GoogleApiClient.C
     }
 
 
-    void updateVars(){
-        String output="";
+    void updateVars() {
+        String output = "";
         try {
-
-            URL url = new URL("https://5e53bac1-d2fa-4133-9c25-7e9e5dda04fb-bluemix:f04a9fc88efb8219348306dfc4f1329eab5187ea295a665b2955f67a43bb554d@5e53bac1-d2fa-4133-9c25-7e9e5dda04fb-bluemix.cloudant.com/testdatabase/_all_docs");
+            URL url = new URL("https://" + API_KEY + ":" + API_PASS + "@" + API_KEY + ".cloudant.com/testdatabase/_all_docs?include_docs=true");
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             // open the stream and put it into BufferedReader
-            conn.setRequestProperty("HOST",API_KEY+".cloudant.com");
-
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Content-Encoding", "gzip");
+            conn.setRequestProperty("Authorization", "Basic NWU1M2JhYzEtZDJmYS00MTMzLTljMjUtN2U5ZTVkZGEwNGZiLWJsdWVtaXg6ZjA0YTlmYzg4ZWZiODIxOTM0ODMwNmRmYzRmMTMyOWVhYjUxODdlYTI5NWE2NjViMjk1NWY2N2E0M2JiNTU0ZA==");
             conn.setInstanceFollowRedirects(true);  //you still need to handle redirect manully.
-            HttpURLConnection.setFollowRedirects(true);
-
+            HttpsURLConnection.setFollowRedirects(true);
+            Log.d("LOL", String.valueOf(conn.getResponseCode()));
+/*
             // get redirect url from "location" header field
-            String newUrl = conn.getHeaderField("Location");
-
+           String newUrl = conn.getHeaderField("Location");
+            Log.d("NEW URL", newUrl+"::::lol");
             // get the cookie if need, for login
             String cookies = conn.getHeaderField("Set-Cookie");
 
             // open the new connnection again
             conn = (HttpsURLConnection) new URL(newUrl).openConnection();
             conn.setRequestProperty("Cookie", cookies);
-
+            conn.addRequestProperty("User-Agent", "Mozilla");
+*/
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(conn.getInputStream()));
             String inputLine;
             while ((inputLine = br.readLine()) != null) {
-                output+=inputLine;
+                output += inputLine;
             }
             br.close();
             //Log.d("RESPONSE",IOUtils.toString(url));
@@ -430,14 +429,16 @@ public class FleetActivity extends FragmentActivity implements GoogleApiClient.C
         } finally {
             try {
                 JSONArray rows = new JSONObject(output).getJSONArray("rows");
-                if(rows!=null){
+                if (rows != null) {
                     int pos = 0, maxval = -1;
-                    for(int i=0;i<rows.length();i++){
+                    for (int i = 0; i < rows.length(); i++) {
                         String record = rows.getJSONObject(i).getString("id");
-                        int val = Integer.valueOf(record.substring(6));
-                        if(val>maxval){
-                            maxval=val;
-                            pos=i;
+                        if (record.contains("record")) {
+                            int val = Integer.valueOf(record.substring(6));
+                            if (val > maxval) {
+                                maxval = val;
+                                pos = i;
+                            }
                         }
                     }
                     String key = rows.getJSONObject(pos).getString("id");
@@ -457,26 +458,33 @@ public class FleetActivity extends FragmentActivity implements GoogleApiClient.C
             public void handleMessage(Message message) {
                 // This is where you do your work in the UI thread.
                 // Your worker tells you in the message what to do.
-                ((TextView)findViewById(R.id.temperatureNumber)).setText(temp);
-                ((TextView)findViewById(R.id.humidityNumber)).setText(humidity);
+                ((TextView) findViewById(R.id.temperatureNumber)).setText(String.valueOf(temp));
+                ((TextView) findViewById(R.id.humidityNumber)).setText(String.valueOf(humidity));
             }
         };
         mHandler.sendEmptyMessage(0);
 
     }
+
     private void extractValuesFromKey(String key) {
         String output = "";
         try {
-            URL url = new URL("https://" + API_KEY + ":" + API_PASS + "@" + API_KEY + ".cloudant.com/my_database/_all_docs?include_docs=true&&key="+"\""+key+"\"");
+            URL url = new URL("https://" + API_KEY + ":" + API_PASS + "@" + API_KEY + ".cloudant.com/testdatabase/_all_docs?include_docs=true&&key=" + "%22" + key + "%22");
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Content-Encoding", "gzip");
+            conn.setRequestProperty("Authorization", "Basic NWU1M2JhYzEtZDJmYS00MTMzLTljMjUtN2U5ZTVkZGEwNGZiLWJsdWVtaXg6ZjA0YTlmYzg4ZWZiODIxOTM0ODMwNmRmYzRmMTMyOWVhYjUxODdlYTI5NWE2NjViMjk1NWY2N2E0M2JiNTU0ZA==");
+            conn.setInstanceFollowRedirects(true);  //you still need to handle redirect manully.
+            HttpsURLConnection.setFollowRedirects(true);
             // open the stream and put it into BufferedReader
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(conn.getInputStream()));
 
             String inputLine;
             while ((inputLine = br.readLine()) != null) {
-                output+=inputLine;
+                output += inputLine;
             }
             br.close();
         } catch (IOException e) {
@@ -497,18 +505,11 @@ public class FleetActivity extends FragmentActivity implements GoogleApiClient.C
         }
     }
 
-    private class UpdateVariables extends AsyncTask<Void,Void,Void>{
+    private class UpdateVariables extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Looper.prepare();
-            new Runnable() {
-                @Override
-                public void run() {
-                    updateVars();
-                    new Handler().postDelayed(this,10000);
-                }
-            }.run();
+            updateVars();
             return null;
         }
     }
