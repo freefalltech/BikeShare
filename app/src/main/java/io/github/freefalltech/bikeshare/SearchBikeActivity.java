@@ -19,6 +19,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -43,6 +45,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 
+
 public class SearchBikeActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -50,7 +53,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
     private Location mCurrentLocation;
     private LocationRequest mLocationRequest;
     boolean mRequestLocationUpdates;
-    TextView addressTextView, lastUpdatedTime;
+    TextView addressTextView, lastUpdatedTime, titleTextDockInfo, bikeAvailableNumber, dockAvailableNumber;
     String mLastUpdateTime, mAddressOutput;
     private ResultReceiver mResultReceiver;
     int permissionLocationCheckFine;
@@ -68,6 +71,10 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
     //and latitudes and longitudes of places are split into two arrays. therefore array's index should match
     double[] latArray = {12.302494, 12.302842, 12.305103, 12.312557, 12.298020};
     double[] longArray = {76.665334, 76.643230, 76.655098, 76.658174, 76.664368};
+
+
+    //Dock INFORMATION global variables
+    String BIKES_AVAILABLE, DOCKS_AVAILABLE;
 
 
     @Override
@@ -246,6 +253,10 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         TextView bikeFinderTextTwo = (TextView) findViewById(R.id.bikeFinderTxt2);
         TextView bikeFinderTextThree = (TextView) findViewById(R.id.bikeFinderTxt3);
         TextView findBikeText = (TextView) findViewById(R.id.findBikeText);
+        titleTextDockInfo = (TextView) findViewById(R.id.dockTitle);
+        bikeAvailableNumber = (TextView) findViewById(R.id.bikesAvailableNumber);
+        dockAvailableNumber = (TextView) findViewById(R.id.docksAvailableNumber);
+
 
         addressTextView = (TextView) findViewById(R.id.addressTextView);
         //lastUpdatedTime = (TextView) findViewById(R.id.lastUpdatedTime);
@@ -254,6 +265,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         bikeFinderTextTwo.setTypeface(futura);
         bikeFinderTextThree.setTypeface(futura);
         findBikeText.setTypeface(futuraItalic);
+        titleTextDockInfo.setTypeface(futura);
         //typefaces set
 
 
@@ -293,7 +305,7 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
         markerOptions1 = new MarkerOptions().position(mysoreZoo).title("Mysore Zoo");
         markerOptions2 = new MarkerOptions().position(KSRTC).title("KSRTC");
         markerOptions3 = new MarkerOptions().position(mysorePalace).title("Mysore Palace");
-        markerOptions4 = new MarkerOptions().position(mysoreRuralTerminus).title("Mysore Rural Terminus");
+        markerOptions4 = new MarkerOptions().position(mysoreRuralTerminus).title("Mysore Mofussil Terminus");
         markerOptions5 = new MarkerOptions().position(inoxMysore).title("INOX Mysore");
 
 
@@ -317,17 +329,64 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
     @Override
     protected void onResume() {
         super.onResume();
-        if(FirebaseAuth.getInstance().getCurrentUser()==null){
+        /*if(FirebaseAuth.getInstance().getCurrentUser()==null){
             startActivity(new Intent(SearchBikeActivity.this,LoginActivity.class));
             finish();
-        }
+        }*/
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker) {
+    public boolean onMarkerClick(Marker arg0) {
+        //sliderlayout is shown
+
+        RelativeLayout sliderLayout = (RelativeLayout) findViewById(R.id.sliderLayout);
+        sliderLayout.setVisibility(View.VISIBLE);
+        titleTextDockInfo = (TextView) findViewById(R.id.dockTitle);
 
 
-        //TODO pass LatLng and String id values to the FleetManagement Activity
+        String titleName;
+        int markerInt;
+        if(arg0.getTitle().equals("Mysore Zoo")){
+            titleName = arg0.getTitle();
+            titleTextDockInfo.setText(titleName);
+            BIKES_AVAILABLE = "12";
+            DOCKS_AVAILABLE = "3";
+            bikeAvailableNumber.setText(BIKES_AVAILABLE);
+            dockAvailableNumber.setText(DOCKS_AVAILABLE);
+        }else if(arg0.getTitle().equals("KSRTC")){
+            titleName = arg0.getTitle();
+            titleTextDockInfo.setText(titleName);
+            BIKES_AVAILABLE = "11";
+            DOCKS_AVAILABLE = "7";
+            bikeAvailableNumber.setText(BIKES_AVAILABLE);
+            dockAvailableNumber.setText(DOCKS_AVAILABLE);
+            markerInt = 2;
+        }else if(arg0.getTitle().equals("Mysore Palace")){
+            titleName = arg0.getTitle();
+            titleTextDockInfo.setText(titleName);
+            BIKES_AVAILABLE = "16";
+            DOCKS_AVAILABLE = "2";
+            bikeAvailableNumber.setText(BIKES_AVAILABLE);
+            dockAvailableNumber.setText(DOCKS_AVAILABLE);
+            markerInt = 2;
+        }else if(arg0.getTitle().equals("Mysore Mofussil Terminus")){
+            titleName = arg0.getTitle();
+            titleTextDockInfo.setText(titleName);
+            BIKES_AVAILABLE = "18";
+            DOCKS_AVAILABLE = "1";
+            bikeAvailableNumber.setText(BIKES_AVAILABLE);
+            dockAvailableNumber.setText(DOCKS_AVAILABLE);
+            markerInt = 2;
+        }else if(arg0.getTitle().equals("INOX Mysore")){
+            titleName = arg0.getTitle();
+            titleTextDockInfo.setText(titleName);
+            BIKES_AVAILABLE = "13";
+            DOCKS_AVAILABLE = "2";
+            bikeAvailableNumber.setText(BIKES_AVAILABLE);
+            dockAvailableNumber.setText(DOCKS_AVAILABLE);
+            markerInt = 2;
+        }
+
         return false;
     }
 
