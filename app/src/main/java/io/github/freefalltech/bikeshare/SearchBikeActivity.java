@@ -329,10 +329,10 @@ public class SearchBikeActivity extends FragmentActivity implements GoogleApiCli
     @Override
     protected void onResume() {
         super.onResume();
-        /*if(FirebaseAuth.getInstance().getCurrentUser()==null){
+        if(FirebaseAuth.getInstance().getCurrentUser()==null){
             startActivity(new Intent(SearchBikeActivity.this,LoginActivity.class));
             finish();
-        }*/
+        }
     }
 
     @Override
