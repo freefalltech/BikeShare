@@ -1,53 +1,137 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/search_bike_layut"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
+    android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    tools:context="io.github.freefalltech.bikeshare.FleetActivity"
-    android:orientation="vertical">
+    android:gravity="bottom"
+    sothree:umanoPanelHeight="68dp"
+    sothree:umanoShadowHeight="4dp">
 
     <LinearLayout
+        android:id="@+id/fleet_layout"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        tools:context="io.github.freefalltech.bikeshare.FleetActivity">
 
-
-        <TextView
-            android:id="@+id/findBikeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/fleet_manage"
-            android:textColor="@color/black"
-            android:textSize="22sp" />
-
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible">
+            android:orientation="vertical">
 
 
-            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
+            <TextView
+                android:id="@+id/findBikeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/fleet_manage"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
+
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="500sp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_margin="10sp"
-                android:layout_marginTop="20sp"
-                tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+                android:layout_height="wrap_content"
+                android:visibility="visible">
 
-        </RelativeLayout>
+
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="500sp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="10sp"
+                    android:layout_marginTop="20sp"
+                    tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
 
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/sliderLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
 
-</LinearLayout>
+
+        <TextView
+            android:id="@+id/dockTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Select a station"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+
+        <ImageView
+            android:layout_marginTop="100sp"
+            android:id="@+id/imageView4"
+            android:layout_width="120sp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_toLeftOf="@+id/imageView5"
+            android:layout_toStartOf="@+id/imageView5"
+            android:src="@drawable/temperature_critical" />
+
+        <TextView
+            android:id="@+id/temperatureNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/imageView4"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/imageView4"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="224dp"
+            android:text="29"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+
+
+        <ImageView
+            android:layout_marginTop="100sp"
+            android:id="@+id/imageView5"
+            android:layout_width="120sp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="69dp"
+            android:layout_marginRight="69dp"
+            android:src="@drawable/humidity_critical" />
+
+        <TextView
+            android:id="@+id/humidityNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/temperatureNumber"
+            android:layout_alignBottom="@+id/temperatureNumber"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/imageView4"
+            android:layout_toRightOf="@+id/imageView4"
+            android:text="50"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+
+
+    </RelativeLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

@@ -1,5 +1,4 @@
 package io.github.freefalltech.bikeshare;
-//26 May 2017, Coded and maintained by abilash senthilkumar. github : @nextbiggeek
 
 
 import android.Manifest;
